@@ -157,6 +157,21 @@ public class Administrador extends javax.swing.JFrame {
     private int idRepuestos = 1;
     private int idServicios = 1;
     
+    private double obtenerPrecioRepuesto(String marca, String modelo) {
+    for (String[] repuesto : repuestos) {
+        if (repuesto.length >= 6 && repuesto[2].equalsIgnoreCase(marca) && repuesto[3].equalsIgnoreCase(modelo)) {
+            try {
+                return Double.parseDouble(repuesto[5]); 
+            } catch (NumberFormatException e) {
+                return 0; // Si el precio del repuesto no es válido, devolvemos 0
+            }
+        }
+    }
+    return 0; // Si no se encuentra un repuesto, devolvemos 0 sin mostrar mensaje
+    }
+
+
+    
     private void CerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarSesionActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog (null, "Cerrando Sesion");
@@ -179,6 +194,7 @@ public class Administrador extends javax.swing.JFrame {
         modeloTabla.addColumn("Modelo");
         modeloTabla.addColumn("Existencias");
         modeloTabla.addColumn("Precio");
+        
 
         JTable tabla = new JTable(modeloTabla);
         tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
@@ -260,38 +276,54 @@ public class Administrador extends javax.swing.JFrame {
     private void ImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportarActionPerformed
         // TODO add your handling code here:
             JFileChooser fileChooser = new JFileChooser();
-            int seleccion = fileChooser.showOpenDialog(this);
+    int seleccion = fileChooser.showOpenDialog(this);
 
-        if (seleccion == JFileChooser.APPROVE_OPTION) {
-            File archivoSeleccionado = fileChooser.getSelectedFile();
-            String nombreArchivo = archivoSeleccionado.getName();
+    if (seleccion == JFileChooser.APPROVE_OPTION) {
+        File archivoSeleccionado = fileChooser.getSelectedFile();
+        String nombreArchivo = archivoSeleccionado.getName();
 
-            try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
-                if (nombreArchivo.endsWith(".tmr")) {
-                    repuestos.clear(); // Limpia los datos antes de importar nuevos repuestos
-                    String linea;
-                    while ((linea = br.readLine()) != null) { 
-                        String[] datos = linea.split("-"); // Divide la línea por "-"
-                        repuestos.add(new String[]{String.valueOf(idRepuestos), datos[0], datos[1], datos[2], datos[3], datos[4]});
-                        idRepuestos++; // Incrementar ID correlativo
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
+            if (nombreArchivo.endsWith(".tmr")) {
+                repuestos.clear(); // Limpia los datos antes de importar nuevos repuestos
+                String linea;
+                while ((linea = br.readLine()) != null) { 
+                    String[] datos = linea.split("-");
+                    try {
+                        // Convertimos el precio a número antes de almacenarlo
+                        double precio = Double.parseDouble(datos[4]); 
+                        repuestos.add(new String[]{String.valueOf(idRepuestos++), datos[0], datos[1], datos[2], datos[3], String.valueOf(precio)});
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "Error al leer precio del repuesto en el archivo.");
                     }
-                    JOptionPane.showMessageDialog(null, "Repuestos importados correctamente.");
-                } else if (nombreArchivo.endsWith(".tms")) {
-                    servicios.clear(); // Limpia los datos antes de importar nuevos servicios
-                    String linea;
-                    while ((linea = br.readLine()) != null) { 
-                        String[] datos = linea.split("-");
-                        servicios.add(new String[]{String.valueOf(idServicios), datos[0], datos[1], datos[2], datos[3], datos[4]});
-                        idServicios++; // Incrementar ID correlativo
+                }
+                JOptionPane.showMessageDialog(null, "Repuestos importados correctamente.");
+            } else if (nombreArchivo.endsWith(".tms")) {
+                servicios.clear(); // Limpia los datos antes de importar nuevos servicios
+                String linea;
+                while ((linea = br.readLine()) != null) { 
+                    String[] datos = linea.split("-");
+                    try {
+                        // Convertimos el precio de mano de obra a número
+                        double manoObra = Double.parseDouble(datos[4]); 
+                        // Obtener el precio del repuesto asociado
+                        double precioRepuesto = obtenerPrecioRepuesto(datos[1], datos[2]); 
+                        // Calcular el precio total
+                        double precioTotal = precioRepuesto + manoObra;
+
+                        // Agregar el servicio con el cálculo correcto en un solo paso
+                        servicios.add(new String[]{String.valueOf(idServicios++), datos[0], datos[1], datos[2], datos[3], datos[4], String.valueOf(precioTotal)});
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "Error al leer precio en el archivo de servicios.");
                     }
-                    JOptionPane.showMessageDialog(null, "Servicios importados correctamente.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Formato de archivo no soportado.");
                 }
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
-                }
-        }   
+                JOptionPane.showMessageDialog(null, "Servicios importados correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Formato de archivo no soportado.");
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
+        }
+    }
     }//GEN-LAST:event_ImportarActionPerformed
 
     private void ServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ServicioActionPerformed
@@ -308,6 +340,7 @@ public class Administrador extends javax.swing.JFrame {
         modeloTabla.addColumn("Modelo");
         modeloTabla.addColumn("Repuestos");
         modeloTabla.addColumn("Mano de Obra");
+        modeloTabla.addColumn("Precio Total");
 
         JTable tabla = new JTable(modeloTabla);
         tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
@@ -343,6 +376,7 @@ public class Administrador extends javax.swing.JFrame {
                 String modelo = (String) modeloTabla.getValueAt(i, 3);
                 String repuestos = (String) modeloTabla.getValueAt(i, 4);
                 String manoObra = (String) modeloTabla.getValueAt(i, 5);
+                String precioTotal = (String) modeloTabla.getValueAt(i, 6);
                 servicios.add(new String[]{id, servicio, marca, modelo, repuestos, manoObra});
             }
 
@@ -354,7 +388,7 @@ public class Administrador extends javax.swing.JFrame {
         JTextField txtMarca = new JTextField(10);
         JTextField txtModelo = new JTextField(10);
         JTextField txtRepuestos = new JTextField(15);
-        JTextField txtManoObra = new JTextField(5);
+        JTextField txtManoObra = new JTextField(5);    
         JButton btnAgregar = new JButton("Agregar Servicio");
 
         btnAgregar.addActionListener(e -> {
@@ -363,15 +397,22 @@ public class Administrador extends javax.swing.JFrame {
             String modelo = txtModelo.getText();
             String repuestos = txtRepuestos.getText();
             String manoObra = txtManoObra.getText();
-
-            if (!servicio.isEmpty() && !marca.isEmpty() && !modelo.isEmpty() && !repuestos.isEmpty() && !manoObra.isEmpty()) {
-                String id = String.valueOf(idServicios++); // Generar nuevo ID automáticamente
-                servicios.add(new String[]{id, servicio, marca, modelo, repuestos, manoObra});
-                modeloTabla.addRow(new String[]{id, servicio, marca, modelo, repuestos, manoObra});
+            double precioRepuesto = obtenerPrecioRepuesto(marca, modelo);
+            
+                if (!servicio.isEmpty() && !marca.isEmpty() && !modelo.isEmpty() && !repuestos.isEmpty() && !manoObra.isEmpty()) {
+            try {
+                double manoDeObraNum = Double.parseDouble(manoObra);
+                double total = precioRepuesto + manoDeObraNum; // Calcular el precio total
+                String id = String.valueOf(idServicios++);
+                servicios.add(new String[]{id, servicio, marca, modelo, repuestos, manoObra, String.valueOf(total)});
+                modeloTabla.addRow(new String[]{id, servicio, marca, modelo, repuestos, manoObra, String.valueOf(total)});
                 JOptionPane.showMessageDialog(null, "Servicio agregado correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(null, "Complete todos los campos.");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Error: Mano de obra debe ser un número válido.");
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Complete todos los campos.");
+        }
         });
 
         JPanel panelFormulario = new JPanel();

@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -46,7 +47,7 @@ public class Administrador extends javax.swing.JFrame {
 
         Repuestos = new javax.swing.JButton();
         Servicio = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        ClienteAuto = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         CerrarSesion = new javax.swing.JButton();
@@ -70,7 +71,12 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Clientes y Automoviles");
+        ClienteAuto.setText("Clientes y Automoviles");
+        ClienteAuto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ClienteAutoActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Progreso Autos");
 
@@ -106,7 +112,7 @@ public class Administrador extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(jButton4)
                             .addComponent(jButton5)
-                            .addComponent(jButton3))
+                            .addComponent(ClienteAuto))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -141,7 +147,7 @@ public class Administrador extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Servicio)
                 .addGap(24, 24, 24)
-                .addComponent(jButton3)
+                .addComponent(ClienteAuto)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -154,6 +160,7 @@ public class Administrador extends javax.swing.JFrame {
 
     private Vector<String[]> repuestos = new Vector<>();
     private Vector<String[]> servicios = new Vector<>();
+    private Vector<String[]> clientes = new Vector<>();
     private int idRepuestos = 1;
     private int idServicios = 1;
     
@@ -197,6 +204,14 @@ public class Administrador extends javax.swing.JFrame {
         
 
         JTable tabla = new JTable(modeloTabla);
+        
+        //Ajuste automático de columnas
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        TableColumnModel columnModel = tabla.getColumnModel();
+        for (int i = 0; i < tabla.getColumnCount(); i++) {
+            columnModel.getColumn(i).setPreferredWidth(100); // Ajuste mínimo de columnas
+        }
+        
         tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
         JScrollPane scrollPane = new JScrollPane(tabla);
         ventanaEmergente.add(scrollPane, java.awt.BorderLayout.CENTER);
@@ -317,12 +332,31 @@ public class Administrador extends javax.swing.JFrame {
                     }
                 }
                 JOptionPane.showMessageDialog(null, "Servicios importados correctamente.");
-            } else {
+            } else if (nombreArchivo.endsWith(".tmca")) {
+                clientes.clear(); 
+                String linea;
+                while ((linea = br.readLine()) != null) { 
+                    String[] datosCliente = linea.split("-");
+                    if (datosCliente.length < 6) continue;
+
+                    String id = String.valueOf(clientes.size() + 1);
+                    String nombre = datosCliente[1];
+                    String usuario = datosCliente[2];
+                    String contraseña = datosCliente[3];
+                    String tipoCliente = datosCliente[4];
+                    String automoviles = datosCliente[5];
+
+                    clientes.add(new String[]{id, nombre, usuario, contraseña, tipoCliente, automoviles});
+                }
+                JOptionPane.showMessageDialog(null, "Datos importados correctamente.");
+            }
+            else{
                 JOptionPane.showMessageDialog(null, "Formato de archivo no soportado.");
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
         }
+        
     }
     }//GEN-LAST:event_ImportarActionPerformed
 
@@ -343,6 +377,14 @@ public class Administrador extends javax.swing.JFrame {
         modeloTabla.addColumn("Precio Total");
 
         JTable tabla = new JTable(modeloTabla);
+        
+        // Ajuste automático de columnas
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        TableColumnModel columnModel = tabla.getColumnModel();
+        for (int i = 0; i < tabla.getColumnCount(); i++) {
+            columnModel.getColumn(i).setPreferredWidth(100); // Ajuste mínimo de columnas
+        }
+
         tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
         JScrollPane scrollPane = new JScrollPane(tabla);
         ventanaEmergente.add(scrollPane, java.awt.BorderLayout.CENTER);
@@ -418,6 +460,7 @@ public class Administrador extends javax.swing.JFrame {
         JPanel panelFormulario = new JPanel();
         panelFormulario.add(new JLabel("Servicio:"));
         panelFormulario.add(txtServicio);
+        
         panelFormulario.add(new JLabel("Marca:"));
         panelFormulario.add(txtMarca);
         panelFormulario.add(new JLabel("Modelo:"));
@@ -435,6 +478,105 @@ public class Administrador extends javax.swing.JFrame {
         ventanaEmergente.add(panelFormulario, java.awt.BorderLayout.NORTH);
         ventanaEmergente.setVisible(true);
     }//GEN-LAST:event_ServicioActionPerformed
+
+    private void ClienteAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClienteAutoActionPerformed
+        // TODO add your handling code here:
+        JFrame ventanaEmergente = new JFrame("Clientes y Automóviles");
+    ventanaEmergente.setSize(1250, 400);
+    ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    ventanaEmergente.setLayout(new java.awt.BorderLayout());
+
+    DefaultTableModel modeloTabla = new DefaultTableModel();
+    modeloTabla.addColumn("ID");
+    modeloTabla.addColumn("Nombre");
+    modeloTabla.addColumn("Usuario");
+    modeloTabla.addColumn("Contraseña");
+    modeloTabla.addColumn("Tipo Cliente");
+    modeloTabla.addColumn("Automóviles");
+
+    JTable tabla = new JTable(modeloTabla);
+    
+        // Ajuste automático de columnas
+    tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    TableColumnModel columnModel = tabla.getColumnModel();
+    for (int i = 0; i < tabla.getColumnCount(); i++) {
+        columnModel.getColumn(i).setPreferredWidth(100); // Ajuste mínimo de columnas
+    }
+
+    tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
+    JScrollPane scrollPane = new JScrollPane(tabla);
+    ventanaEmergente.add(scrollPane, java.awt.BorderLayout.CENTER);
+
+    // Llenar la tabla con los datos guardados en el vector clientes
+    for (String[] fila : clientes) {
+        modeloTabla.addRow(fila);
+    }
+
+    JButton btnEliminar = new JButton("Eliminar Cliente");
+    btnEliminar.addActionListener(e -> {
+        int filaSeleccionada = tabla.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            clientes.remove(filaSeleccionada);
+            modeloTabla.removeRow(filaSeleccionada);
+            JOptionPane.showMessageDialog(null, "Cliente eliminado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un cliente para eliminar.");
+        }
+    });
+
+    JButton btnModificar = new JButton("Guardar Modificaciones");
+    btnModificar.addActionListener(e -> {
+        int filas = modeloTabla.getRowCount();
+        clientes.clear(); // Se vacía antes de actualizar los cambios
+
+        for (int i = 0; i < filas; i++) {
+            String id = (String) modeloTabla.getValueAt(i, 0);
+            String nombre = (String) modeloTabla.getValueAt(i, 1);
+            String usuario = (String) modeloTabla.getValueAt(i, 2);
+            String contraseña = (String) modeloTabla.getValueAt(i, 3);
+            String tipoCliente = (String) modeloTabla.getValueAt(i, 4);
+            String automoviles = (String) modeloTabla.getValueAt(i, 5);
+            clientes.add(new String[]{id, nombre, usuario, contraseña, tipoCliente, automoviles});
+        }
+
+        JOptionPane.showMessageDialog(null, "Modificaciones guardadas correctamente.");
+    });
+
+    // Formulario para agregar clientes nuevos
+    JTextField txtNombre = new JTextField(10);
+    JTextField txtUsuario = new JTextField(10);
+    JTextField txtContraseña = new JTextField(10);
+    JTextField txtTipoCliente = new JTextField(10);
+    JTextField txtAutomoviles = new JTextField(15);
+    JButton btnAgregar = new JButton("Agregar Cliente");
+
+    btnAgregar.addActionListener(e -> {
+        String id = String.valueOf(clientes.size() + 1); // Generar nuevo ID
+        clientes.add(new String[]{id, txtNombre.getText(), txtUsuario.getText(), txtContraseña.getText(), txtTipoCliente.getText(), txtAutomoviles.getText()});
+        modeloTabla.addRow(new String[]{id, txtNombre.getText(), txtUsuario.getText(), txtContraseña.getText(), txtTipoCliente.getText(), txtAutomoviles.getText()});
+        JOptionPane.showMessageDialog(null, "Cliente agregado correctamente.");
+    });
+
+    JPanel panelFormulario = new JPanel();
+    panelFormulario.add(new JLabel("Nombre:"));
+    panelFormulario.add(txtNombre);
+    panelFormulario.add(new JLabel("Usuario:"));
+    panelFormulario.add(txtUsuario);
+    panelFormulario.add(new JLabel("Contraseña:"));
+    panelFormulario.add(txtContraseña);
+    panelFormulario.add(new JLabel("Tipo Cliente:"));
+    panelFormulario.add(txtTipoCliente);
+    panelFormulario.add(new JLabel("Automóviles:"));
+    panelFormulario.add(txtAutomoviles);
+    panelFormulario.add(btnAgregar);
+
+    JPanel panelBotones = new JPanel();
+    panelBotones.add(btnEliminar);
+    panelBotones.add(btnModificar);
+    ventanaEmergente.add(panelBotones, java.awt.BorderLayout.SOUTH);
+    ventanaEmergente.add(panelFormulario, java.awt.BorderLayout.NORTH);
+    ventanaEmergente.setVisible(true);
+    }//GEN-LAST:event_ClienteAutoActionPerformed
 
     
     /**
@@ -474,10 +616,10 @@ public class Administrador extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CerrarSesion;
+    private javax.swing.JButton ClienteAuto;
     private javax.swing.JButton Importar;
     private javax.swing.JButton Repuestos;
     private javax.swing.JButton Servicio;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;

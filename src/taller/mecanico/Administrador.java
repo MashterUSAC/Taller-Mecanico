@@ -10,11 +10,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
@@ -41,7 +45,7 @@ public class Administrador extends javax.swing.JFrame {
     private void initComponents() {
 
         Repuestos = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        Servicio = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -59,10 +63,10 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Servicios");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Servicio.setText("Servicios");
+        Servicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                ServicioActionPerformed(evt);
             }
         });
 
@@ -106,7 +110,7 @@ public class Administrador extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Servicio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Repuestos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -135,7 +139,7 @@ public class Administrador extends javax.swing.JFrame {
                     .addComponent(Repuestos)
                     .addComponent(Importar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(Servicio)
                 .addGap(24, 24, 24)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -150,6 +154,8 @@ public class Administrador extends javax.swing.JFrame {
 
     private Vector<String[]> repuestos = new Vector<>();
     private Vector<String[]> servicios = new Vector<>();
+    private int idRepuestos = 1;
+    private int idServicios = 1;
     
     private void CerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarSesionActionPerformed
         // TODO add your handling code here:
@@ -162,11 +168,12 @@ public class Administrador extends javax.swing.JFrame {
     private void RepuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RepuestosActionPerformed
         // TODO add your handling code here:
         JFrame ventanaEmergente = new JFrame("Repuestos Importados");
-        ventanaEmergente.setSize(600, 300);
+        ventanaEmergente.setSize(1250, 400);
         ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ventanaEmergente.setLayout(new java.awt.BorderLayout());
 
         DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("ID");
         modeloTabla.addColumn("Nombre");
         modeloTabla.addColumn("Marca");
         modeloTabla.addColumn("Modelo");
@@ -174,17 +181,82 @@ public class Administrador extends javax.swing.JFrame {
         modeloTabla.addColumn("Precio");
 
         JTable tabla = new JTable(modeloTabla);
+        tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
         JScrollPane scrollPane = new JScrollPane(tabla);
         ventanaEmergente.add(scrollPane, java.awt.BorderLayout.CENTER);
 
-        // Llenar la tabla con los datos guardados en el vector
         for (String[] fila : repuestos) {
             modeloTabla.addRow(fila);
         }
+        
+            JButton btnEliminar = new JButton("Eliminar Registro");
+        btnEliminar.addActionListener(e -> {
+            int filaSeleccionada = tabla.getSelectedRow();
+            if (filaSeleccionada >= 0) {
+                repuestos.remove(filaSeleccionada);
+                modeloTabla.removeRow(filaSeleccionada);
+                JOptionPane.showMessageDialog(null, "Registro eliminado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una fila para eliminar.");
+            }
+        });
+        
+        
+        JButton btnModificar = new JButton("Guardar Modificaciones");
+    btnModificar.addActionListener(e -> {
+        int filas = modeloTabla.getRowCount();
+        repuestos.clear(); // Limpiar el vector y guardar los datos editados
 
+        for (int i = 0; i < filas; i++) {
+            String id = (String) modeloTabla.getValueAt(i, 0);
+            String nombre = (String) modeloTabla.getValueAt(i, 1);
+            String marca = (String) modeloTabla.getValueAt(i, 2);
+            String modelo = (String) modeloTabla.getValueAt(i, 3);
+            String existencias = (String) modeloTabla.getValueAt(i, 4);
+            String precio = (String) modeloTabla.getValueAt(i, 5);
+            repuestos.add(new String[]{id, nombre, marca, modelo, existencias, precio});
+        }
+
+        JOptionPane.showMessageDialog(null, "Modificaciones guardadas correctamente.");
+    });
+    
+        //Agregar Datos
+        JTextField txtNombre = new JTextField(10);
+        JTextField txtMarca = new JTextField(10);
+        JTextField txtModelo = new JTextField(10);
+        JTextField txtExistencias = new JTextField(5);
+        JTextField txtPrecio = new JTextField(5);
+        JButton btnAgregar = new JButton("Agregar Repuesto");
+
+        btnAgregar.addActionListener(e -> {
+        String id = String.valueOf(idRepuestos++);
+        repuestos.add(new String[]{id, txtNombre.getText(), txtMarca.getText(), txtModelo.getText(), txtExistencias.getText(), txtPrecio.getText()});
+        modeloTabla.addRow(new String[]{id, txtNombre.getText(), txtMarca.getText(), txtModelo.getText(), txtExistencias.getText(), txtPrecio.getText()});
+        JOptionPane.showMessageDialog(null, "Repuesto agregado correctamente.");
+    });
+
+        JPanel panelFormulario = new JPanel();
+        panelFormulario.add(new JLabel("Nombre:"));
+        panelFormulario.add(txtNombre);
+        panelFormulario.add(new JLabel("Marca:"));
+        panelFormulario.add(txtMarca);
+        panelFormulario.add(new JLabel("Modelo:"));
+        panelFormulario.add(txtModelo);
+        panelFormulario.add(new JLabel("Existencias:"));
+        panelFormulario.add(txtExistencias);
+        panelFormulario.add(new JLabel("Precio:"));
+        panelFormulario.add(txtPrecio);
+        panelFormulario.add(btnAgregar);
+        //Datos
+    
+        JPanel panelBotones = new JPanel();
+        panelBotones.add(btnEliminar);
+        panelBotones.add(btnModificar);
+        ventanaEmergente.add(panelBotones, java.awt.BorderLayout.SOUTH);
+        ventanaEmergente.add(panelFormulario, java.awt.BorderLayout.NORTH);
         ventanaEmergente.setVisible(true);
     }//GEN-LAST:event_RepuestosActionPerformed
-
+        
     private void ImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportarActionPerformed
         // TODO add your handling code here:
             JFileChooser fileChooser = new JFileChooser();
@@ -195,39 +267,42 @@ public class Administrador extends javax.swing.JFrame {
             String nombreArchivo = archivoSeleccionado.getName();
 
             try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
-            if (nombreArchivo.endsWith(".tmr")) {
-                repuestos.clear(); // Limpia los datos antes de importar nuevos repuestos
-                String linea;
-                while ((linea = br.readLine()) != null) { 
-                    String[] datos = linea.split("-"); // Divide la línea por "-"
-                    repuestos.add(datos); // Guarda los datos en el vector
+                if (nombreArchivo.endsWith(".tmr")) {
+                    repuestos.clear(); // Limpia los datos antes de importar nuevos repuestos
+                    String linea;
+                    while ((linea = br.readLine()) != null) { 
+                        String[] datos = linea.split("-"); // Divide la línea por "-"
+                        repuestos.add(new String[]{String.valueOf(idRepuestos), datos[0], datos[1], datos[2], datos[3], datos[4]});
+                        idRepuestos++; // Incrementar ID correlativo
+                    }
+                    JOptionPane.showMessageDialog(null, "Repuestos importados correctamente.");
+                } else if (nombreArchivo.endsWith(".tms")) {
+                    servicios.clear(); // Limpia los datos antes de importar nuevos servicios
+                    String linea;
+                    while ((linea = br.readLine()) != null) { 
+                        String[] datos = linea.split("-");
+                        servicios.add(new String[]{String.valueOf(idServicios), datos[0], datos[1], datos[2], datos[3], datos[4]});
+                        idServicios++; // Incrementar ID correlativo
+                    }
+                    JOptionPane.showMessageDialog(null, "Servicios importados correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Formato de archivo no soportado.");
                 }
-                JOptionPane.showMessageDialog(null, "Repuestos importados correctamente.");
-            } else if (nombreArchivo.endsWith(".tms")) {
-                servicios.clear(); // Limpia los datos antes de importar nuevos servicios
-                String linea;
-                while ((linea = br.readLine()) != null) { 
-                    String[] datos = linea.split("-"); // Divide la línea por "-"
-                    servicios.add(datos); // Guarda los datos en el vector
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
                 }
-                JOptionPane.showMessageDialog(null, "Servicios importados correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(null, "Formato de archivo no soportado.");
-            }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
-            }
         }   
     }//GEN-LAST:event_ImportarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void ServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ServicioActionPerformed
         // TODO add your handling code here:
             JFrame ventanaEmergente = new JFrame("Servicios Importados");
-        ventanaEmergente.setSize(600, 300);
+        ventanaEmergente.setSize(1250, 400);
         ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ventanaEmergente.setLayout(new java.awt.BorderLayout());
 
         DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("ID");
         modeloTabla.addColumn("Servicio");
         modeloTabla.addColumn("Marca");
         modeloTabla.addColumn("Modelo");
@@ -235,16 +310,90 @@ public class Administrador extends javax.swing.JFrame {
         modeloTabla.addColumn("Mano de Obra");
 
         JTable tabla = new JTable(modeloTabla);
+        tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
         JScrollPane scrollPane = new JScrollPane(tabla);
         ventanaEmergente.add(scrollPane, java.awt.BorderLayout.CENTER);
 
-        // Llenar la tabla con los datos guardados en el vector
+        // Llenar la tabla con los datos ya almacenados sin limpiar la lista
         for (String[] fila : servicios) {
             modeloTabla.addRow(fila);
         }
 
+        JButton btnEliminar = new JButton("Eliminar Registro");
+        btnEliminar.addActionListener(e -> {
+            int filaSeleccionada = tabla.getSelectedRow();
+            if (filaSeleccionada >= 0) {
+                servicios.remove(filaSeleccionada);
+                modeloTabla.removeRow(filaSeleccionada);
+                JOptionPane.showMessageDialog(null, "Registro eliminado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una fila para eliminar.");
+            }
+        });
+
+        JButton btnModificar = new JButton("Guardar Modificaciones");
+        btnModificar.addActionListener(e -> {
+            int filas = modeloTabla.getRowCount();
+            servicios.clear(); // Ya no se limpia la lista completa
+
+            for (int i = 0; i < filas; i++) {
+                String id = (String) modeloTabla.getValueAt(i, 0);
+                String servicio = (String) modeloTabla.getValueAt(i, 1);
+                String marca = (String) modeloTabla.getValueAt(i, 2);
+                String modelo = (String) modeloTabla.getValueAt(i, 3);
+                String repuestos = (String) modeloTabla.getValueAt(i, 4);
+                String manoObra = (String) modeloTabla.getValueAt(i, 5);
+                servicios.add(new String[]{id, servicio, marca, modelo, repuestos, manoObra});
+            }
+
+            JOptionPane.showMessageDialog(null, "Modificaciones guardadas correctamente.");
+        });
+
+        // Campos de entrada para agregar nuevos servicios con ID automático
+        JTextField txtServicio = new JTextField(10);
+        JTextField txtMarca = new JTextField(10);
+        JTextField txtModelo = new JTextField(10);
+        JTextField txtRepuestos = new JTextField(15);
+        JTextField txtManoObra = new JTextField(5);
+        JButton btnAgregar = new JButton("Agregar Servicio");
+
+        btnAgregar.addActionListener(e -> {
+            String servicio = txtServicio.getText();
+            String marca = txtMarca.getText();
+            String modelo = txtModelo.getText();
+            String repuestos = txtRepuestos.getText();
+            String manoObra = txtManoObra.getText();
+
+            if (!servicio.isEmpty() && !marca.isEmpty() && !modelo.isEmpty() && !repuestos.isEmpty() && !manoObra.isEmpty()) {
+                String id = String.valueOf(idServicios++); // Generar nuevo ID automáticamente
+                servicios.add(new String[]{id, servicio, marca, modelo, repuestos, manoObra});
+                modeloTabla.addRow(new String[]{id, servicio, marca, modelo, repuestos, manoObra});
+                JOptionPane.showMessageDialog(null, "Servicio agregado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Complete todos los campos.");
+            }
+        });
+
+        JPanel panelFormulario = new JPanel();
+        panelFormulario.add(new JLabel("Servicio:"));
+        panelFormulario.add(txtServicio);
+        panelFormulario.add(new JLabel("Marca:"));
+        panelFormulario.add(txtMarca);
+        panelFormulario.add(new JLabel("Modelo:"));
+        panelFormulario.add(txtModelo);
+        panelFormulario.add(new JLabel("Repuestos:"));
+        panelFormulario.add(txtRepuestos);
+        panelFormulario.add(new JLabel("Mano de Obra:"));
+        panelFormulario.add(txtManoObra);
+        panelFormulario.add(btnAgregar);
+
+        JPanel panelBotones = new JPanel();
+        panelBotones.add(btnEliminar);
+        panelBotones.add(btnModificar);
+        ventanaEmergente.add(panelBotones, java.awt.BorderLayout.SOUTH);
+        ventanaEmergente.add(panelFormulario, java.awt.BorderLayout.NORTH);
         ventanaEmergente.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_ServicioActionPerformed
 
     
     /**
@@ -286,7 +435,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JButton CerrarSesion;
     private javax.swing.JButton Importar;
     private javax.swing.JButton Repuestos;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton Servicio;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;

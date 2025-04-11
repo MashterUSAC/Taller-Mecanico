@@ -2,14 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package taller.mecanico;
+package Vista;
 
+import Modelo.DatosPersistencia;
 import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -33,6 +35,7 @@ public class Administrador extends javax.swing.JFrame {
      * Creates new form Administrador
      */
     public Administrador() {
+        DatosPersistencia.cargarDatos(repuestos, servicios, clientes);//Cargar Datos
         initComponents();
     }
 
@@ -48,12 +51,13 @@ public class Administrador extends javax.swing.JFrame {
         Repuestos = new javax.swing.JButton();
         Servicio = new javax.swing.JButton();
         ClienteAuto = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        ProgresoAuto = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         CerrarSesion = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         Importar = new javax.swing.JButton();
+        EliminarTodo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,7 +82,12 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Progreso Autos");
+        ProgresoAuto.setText("Progreso Autos");
+        ProgresoAuto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ProgresoAutoActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Reportes");
 
@@ -100,6 +109,13 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
+        EliminarTodo.setText("Eliminar Datos");
+        EliminarTodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarTodoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,24 +124,29 @@ public class Administrador extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jButton4)
-                            .addComponent(jButton5)
-                            .addComponent(ClienteAuto))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(Servicio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Repuestos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(ClienteAuto)
+                            .addComponent(ProgresoAuto))
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 185, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Importar)
-                    .addComponent(CerrarSesion))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(EliminarTodo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 185, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton5)
+                            .addComponent(Importar)
+                            .addComponent(CerrarSesion))))
                 .addGap(16, 16, 16))
         );
         layout.setVerticalGroup(
@@ -146,24 +167,41 @@ public class Administrador extends javax.swing.JFrame {
                     .addComponent(Importar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Servicio)
-                .addGap(24, 24, 24)
-                .addComponent(ClienteAuto)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(ClienteAuto))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(EliminarTodo)
+                        .addGap(14, 14, 14))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(ProgresoAuto, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+ 
+    
 
     private Vector<String[]> repuestos = new Vector<>();
     private Vector<String[]> servicios = new Vector<>();
     private Vector<String[]> clientes = new Vector<>();
     private int idRepuestos = 1;
     private int idServicios = 1;
-    
+    private int contadorID = 1; // Se inicia en 1, pero puede cambiar si hay datos guardados
+
+    private int generarID() {
+        return contadorID++;
+    }
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {                                        
+        DatosPersistencia.guardarDatos(repuestos, servicios, clientes); // Guardar datos al cerrar
+    }
+     
+    //Sumar Precios 
     private double obtenerPrecioRepuesto(String marca, String modelo) {
     for (String[] repuesto : repuestos) {
         if (repuesto.length >= 6 && repuesto[2].equalsIgnoreCase(marca) && repuesto[3].equalsIgnoreCase(modelo)) {
@@ -176,6 +214,25 @@ public class Administrador extends javax.swing.JFrame {
     }
     return 0; // Si no se encuentra un repuesto, devolvemos 0 sin mostrar mensaje
     }
+    
+    
+    
+    public class Controlador {
+    private Vector<String[]> repuestos = new Vector<>();
+    private Vector<String[]> servicios = new Vector<>();
+    private Vector<String[]> clientes = new Vector<>();
+
+    public Controlador() {
+        DatosPersistencia.cargarDatos(repuestos, servicios, clientes);
+    }
+
+    public void cerrarAplicacion() {
+        DatosPersistencia.guardarDatos(repuestos, servicios, clientes);
+    }
+    
+    
+}
+
 
 
     
@@ -206,10 +263,12 @@ public class Administrador extends javax.swing.JFrame {
         JTable tabla = new JTable(modeloTabla);
         
         //Ajuste automático de columnas
-        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         TableColumnModel columnModel = tabla.getColumnModel();
-        for (int i = 0; i < tabla.getColumnCount(); i++) {
-            columnModel.getColumn(i).setPreferredWidth(100); // Ajuste mínimo de columnas
+        int totalColumnas = tabla.getColumnCount();
+        int anchoVentana = ventanaEmergente.getWidth(); // Obtener ancho de la ventana
+
+        for (int i = 0; i < totalColumnas; i++) {
+            columnModel.getColumn(i).setPreferredWidth(anchoVentana / totalColumnas); // Distribuir espacio
         }
         
         tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
@@ -226,17 +285,18 @@ public class Administrador extends javax.swing.JFrame {
             if (filaSeleccionada >= 0) {
                 repuestos.remove(filaSeleccionada);
                 modeloTabla.removeRow(filaSeleccionada);
-                JOptionPane.showMessageDialog(null, "Registro eliminado correctamente.");
+                
+                DatosPersistencia.guardarDatos(repuestos, servicios, clientes); // Guardar cambios después de modificar
+                JOptionPane.showMessageDialog(null, "Registro eliminado correctamente.");               
             } else {
                 JOptionPane.showMessageDialog(null, "Seleccione una fila para eliminar.");
             }
         });
         
-        
+        //Repuestos
         JButton btnModificar = new JButton("Guardar Modificaciones");
-    btnModificar.addActionListener(e -> {
+        btnModificar.addActionListener(e -> {
         int filas = modeloTabla.getRowCount();
-        repuestos.clear(); // Limpiar el vector y guardar los datos editados
 
         for (int i = 0; i < filas; i++) {
             String id = (String) modeloTabla.getValueAt(i, 0);
@@ -245,11 +305,21 @@ public class Administrador extends javax.swing.JFrame {
             String modelo = (String) modeloTabla.getValueAt(i, 3);
             String existencias = (String) modeloTabla.getValueAt(i, 4);
             String precio = (String) modeloTabla.getValueAt(i, 5);
-            repuestos.add(new String[]{id, nombre, marca, modelo, existencias, precio});
+
+            // Buscar el registro con el mismo ID y actualizarlo dentro de la lista "repuestos"
+            for (int j = 0; j < repuestos.size(); j++) {
+                if (repuestos.get(j)[0].equals(id)) { // Si el ID coincide, actualizar datos
+                    repuestos.set(j, new String[]{id, nombre, marca, modelo, existencias, precio});
+                    break;
+                }
+            }
         }
 
+        DatosPersistencia.guardarDatos(repuestos, servicios, clientes); // Guardar cambios correctamente
         JOptionPane.showMessageDialog(null, "Modificaciones guardadas correctamente.");
     });
+
+
     
         //Agregar Datos
         JTextField txtNombre = new JTextField(10);
@@ -260,11 +330,13 @@ public class Administrador extends javax.swing.JFrame {
         JButton btnAgregar = new JButton("Agregar Repuesto");
 
         btnAgregar.addActionListener(e -> {
-        String id = String.valueOf(idRepuestos++);
-        repuestos.add(new String[]{id, txtNombre.getText(), txtMarca.getText(), txtModelo.getText(), txtExistencias.getText(), txtPrecio.getText()});
-        modeloTabla.addRow(new String[]{id, txtNombre.getText(), txtMarca.getText(), txtModelo.getText(), txtExistencias.getText(), txtPrecio.getText()});
-        JOptionPane.showMessageDialog(null, "Repuesto agregado correctamente.");
-    });
+            String id = String.valueOf(idRepuestos++);
+            repuestos.add(new String[]{id, txtNombre.getText(), txtMarca.getText(), txtModelo.getText(), txtExistencias.getText(), txtPrecio.getText()});
+            modeloTabla.addRow(new String[]{id, txtNombre.getText(), txtMarca.getText(), txtModelo.getText(), txtExistencias.getText(), txtPrecio.getText()});
+            
+            DatosPersistencia.guardarDatos(repuestos, servicios, clientes); // Guardar cambios después de modificar
+            JOptionPane.showMessageDialog(null, "Repuesto agregado correctamente.");
+        });
 
         JPanel panelFormulario = new JPanel();
         panelFormulario.add(new JLabel("Nombre:"));
@@ -289,8 +361,8 @@ public class Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_RepuestosActionPerformed
         
     private void ImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImportarActionPerformed
-        // TODO add your handling code here:
-            JFileChooser fileChooser = new JFileChooser();
+    
+    JFileChooser fileChooser = new JFileChooser();
     int seleccion = fileChooser.showOpenDialog(this);
 
     if (seleccion == JFileChooser.APPROVE_OPTION) {
@@ -299,65 +371,99 @@ public class Administrador extends javax.swing.JFrame {
 
         try (BufferedReader br = new BufferedReader(new FileReader(archivoSeleccionado))) {
             if (nombreArchivo.endsWith(".tmr")) {
-                repuestos.clear(); // Limpia los datos antes de importar nuevos repuestos
                 String linea;
                 while ((linea = br.readLine()) != null) { 
                     String[] datos = linea.split("-");
                     try {
-                        // Convertimos el precio a número antes de almacenarlo
                         double precio = Double.parseDouble(datos[4]); 
-                        repuestos.add(new String[]{String.valueOf(idRepuestos++), datos[0], datos[1], datos[2], datos[3], String.valueOf(precio)});
+
+                        boolean existe = false;
+                        for (String[] repuesto : repuestos) {
+                            if (repuesto[1].equals(datos[0])) { // Verificar si el ID ya existe
+                                repuesto[2] = datos[1]; 
+                                repuesto[3] = datos[2]; 
+                                repuesto[4] = datos[3]; 
+                                repuesto[5] = String.valueOf(precio);
+                                existe = true;
+                                break;
+                            }
+                        }
+
+                        if (!existe) {
+                            String idNuevo = String.valueOf(generarID()); // Generar nuevo ID
+                            repuestos.add(new String[]{String.valueOf(idRepuestos++), datos[0], datos[1], datos[2], datos[3], String.valueOf(precio)});
+                        }
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "Error al leer precio del repuesto en el archivo.");
                     }
                 }
+                DatosPersistencia.guardarDatos(repuestos, servicios, clientes);
                 JOptionPane.showMessageDialog(null, "Repuestos importados correctamente.");
             } else if (nombreArchivo.endsWith(".tms")) {
-                servicios.clear(); // Limpia los datos antes de importar nuevos servicios
                 String linea;
                 while ((linea = br.readLine()) != null) { 
                     String[] datos = linea.split("-");
                     try {
-                        // Convertimos el precio de mano de obra a número
                         double manoObra = Double.parseDouble(datos[4]); 
-                        // Obtener el precio del repuesto asociado
                         double precioRepuesto = obtenerPrecioRepuesto(datos[1], datos[2]); 
-                        // Calcular el precio total
                         double precioTotal = precioRepuesto + manoObra;
 
-                        // Agregar el servicio con el cálculo correcto en un solo paso
-                        servicios.add(new String[]{String.valueOf(idServicios++), datos[0], datos[1], datos[2], datos[3], datos[4], String.valueOf(precioTotal)});
+                        boolean existe = false;
+                        for (String[] servicio : servicios) {
+                            if (servicio[1].equals(datos[0])) { // Verificar si el ID ya existe
+                                servicio[2] = datos[1]; 
+                                servicio[3] = datos[2]; 
+                                servicio[4] = datos[3]; 
+                                servicio[5] = datos[4]; 
+                                servicio[6] = String.valueOf(precioTotal);
+                                existe = true;
+                                break;
+                            }
+                        }
+
+                        if (!existe) {
+                            String idNuevo = String.valueOf(generarID()); // Generar nuevo ID
+                            servicios.add(new String[]{String.valueOf(idServicios++), datos[0], datos[1], datos[2], datos[3], datos[4], String.valueOf(precioTotal)});
+                        }
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "Error al leer precio en el archivo de servicios.");
                     }
                 }
+                DatosPersistencia.guardarDatos(repuestos, servicios, clientes);
                 JOptionPane.showMessageDialog(null, "Servicios importados correctamente.");
             } else if (nombreArchivo.endsWith(".tmca")) {
-                clientes.clear(); 
                 String linea;
                 while ((linea = br.readLine()) != null) { 
                     String[] datosCliente = linea.split("-");
                     if (datosCliente.length < 6) continue;
 
-                    String id = String.valueOf(clientes.size() + 1);
-                    String nombre = datosCliente[1];
-                    String usuario = datosCliente[2];
-                    String contraseña = datosCliente[3];
-                    String tipoCliente = datosCliente[4];
-                    String automoviles = datosCliente[5];
+                    boolean existe = false;
+                    for (String[] cliente : clientes) {
+                        if (cliente[0].equals(datosCliente[0])) { // Verificar si el ID ya existe
+                            cliente[1] = datosCliente[1];
+                            cliente[2] = datosCliente[2];
+                            cliente[3] = datosCliente[3];
+                            cliente[4] = datosCliente[4];
+                            cliente[5] = datosCliente[5];
+                            existe = true;
+                            break;
+                        }
+                    }
 
-                    clientes.add(new String[]{id, nombre, usuario, contraseña, tipoCliente, automoviles});
+                    if (!existe) {
+                        String idNuevo = String.valueOf(generarID()); // Generar nuevo ID
+                        clientes.add(new String[]{datosCliente[0], datosCliente[1], datosCliente[2], datosCliente[3], datosCliente[4], datosCliente[5]});
+                    }
                 }
-                JOptionPane.showMessageDialog(null, "Datos importados correctamente.");
-            }
-            else{
+                DatosPersistencia.guardarDatos(repuestos, servicios, clientes);
+                JOptionPane.showMessageDialog(null, "Clientes importados correctamente.");
+            } else {
                 JOptionPane.showMessageDialog(null, "Formato de archivo no soportado.");
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
         }
-        
-    }
+        }
     }//GEN-LAST:event_ImportarActionPerformed
 
     private void ServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ServicioActionPerformed
@@ -379,10 +485,12 @@ public class Administrador extends javax.swing.JFrame {
         JTable tabla = new JTable(modeloTabla);
         
         // Ajuste automático de columnas
-        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         TableColumnModel columnModel = tabla.getColumnModel();
-        for (int i = 0; i < tabla.getColumnCount(); i++) {
-            columnModel.getColumn(i).setPreferredWidth(100); // Ajuste mínimo de columnas
+        int totalColumnas = tabla.getColumnCount();
+        int anchoVentana = ventanaEmergente.getWidth(); // Obtener ancho de la ventana
+
+        for (int i = 0; i < totalColumnas; i++) {
+            columnModel.getColumn(i).setPreferredWidth(anchoVentana / totalColumnas); // Distribuir espacio
         }
 
         tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
@@ -400,6 +508,8 @@ public class Administrador extends javax.swing.JFrame {
             if (filaSeleccionada >= 0) {
                 servicios.remove(filaSeleccionada);
                 modeloTabla.removeRow(filaSeleccionada);
+                
+                DatosPersistencia.guardarDatos(repuestos, servicios, clientes); // Guardar cambios después de modificar
                 JOptionPane.showMessageDialog(null, "Registro eliminado correctamente.");
             } else {
                 JOptionPane.showMessageDialog(null, "Seleccione una fila para eliminar.");
@@ -409,21 +519,30 @@ public class Administrador extends javax.swing.JFrame {
         JButton btnModificar = new JButton("Guardar Modificaciones");
         btnModificar.addActionListener(e -> {
             int filas = modeloTabla.getRowCount();
-            servicios.clear(); // Ya no se limpia la lista completa
 
             for (int i = 0; i < filas; i++) {
                 String id = (String) modeloTabla.getValueAt(i, 0);
-                String servicio = (String) modeloTabla.getValueAt(i, 1);
-                String marca = (String) modeloTabla.getValueAt(i, 2);
-                String modelo = (String) modeloTabla.getValueAt(i, 3);
-                String repuestos = (String) modeloTabla.getValueAt(i, 4);
+                String nombreServicio = (String) modeloTabla.getValueAt(i, 1);
+                String cliente = (String) modeloTabla.getValueAt(i, 2);
+                String repuestoAsociado = (String) modeloTabla.getValueAt(i, 3);
+                String descripcion = (String) modeloTabla.getValueAt(i, 4);
                 String manoObra = (String) modeloTabla.getValueAt(i, 5);
                 String precioTotal = (String) modeloTabla.getValueAt(i, 6);
-                servicios.add(new String[]{id, servicio, marca, modelo, repuestos, manoObra});
+
+                // Buscar el servicio con el mismo ID y actualizarlo
+                for (int j = 0; j < servicios.size(); j++) {
+                    if (servicios.get(j)[0].equals(id)) { // Si el ID coincide, actualizar datos
+                        servicios.set(j, new String[]{id, nombreServicio, cliente, repuestoAsociado, descripcion, manoObra, precioTotal});
+                        break;
+                    }
+                }
             }
 
+            DatosPersistencia.guardarDatos(null, servicios, null); // Solo guarda servicios
             JOptionPane.showMessageDialog(null, "Modificaciones guardadas correctamente.");
         });
+
+
 
         // Campos de entrada para agregar nuevos servicios con ID automático
         JTextField txtServicio = new JTextField(10);
@@ -448,6 +567,8 @@ public class Administrador extends javax.swing.JFrame {
                 String id = String.valueOf(idServicios++);
                 servicios.add(new String[]{id, servicio, marca, modelo, repuestos, manoObra, String.valueOf(total)});
                 modeloTabla.addRow(new String[]{id, servicio, marca, modelo, repuestos, manoObra, String.valueOf(total)});
+                
+                
                 JOptionPane.showMessageDialog(null, "Servicio agregado correctamente.");
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Error: Mano de obra debe ser un número válido.");
@@ -497,10 +618,12 @@ public class Administrador extends javax.swing.JFrame {
     JTable tabla = new JTable(modeloTabla);
     
         // Ajuste automático de columnas
-    tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     TableColumnModel columnModel = tabla.getColumnModel();
-    for (int i = 0; i < tabla.getColumnCount(); i++) {
-        columnModel.getColumn(i).setPreferredWidth(100); // Ajuste mínimo de columnas
+    int totalColumnas = tabla.getColumnCount();
+    int anchoVentana = ventanaEmergente.getWidth(); // Obtener ancho de la ventana
+
+    for (int i = 0; i < totalColumnas; i++) {
+        columnModel.getColumn(i).setPreferredWidth(anchoVentana / totalColumnas); // Distribuir espacio
     }
 
     tabla.setDefaultEditor(Object.class, new javax.swing.DefaultCellEditor(new JTextField()));
@@ -518,6 +641,8 @@ public class Administrador extends javax.swing.JFrame {
         if (filaSeleccionada >= 0) {
             clientes.remove(filaSeleccionada);
             modeloTabla.removeRow(filaSeleccionada);
+            
+            DatosPersistencia.guardarDatos(repuestos, servicios, clientes); // Guardar cambios después de modificar
             JOptionPane.showMessageDialog(null, "Cliente eliminado correctamente.");
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione un cliente para eliminar.");
@@ -525,9 +650,8 @@ public class Administrador extends javax.swing.JFrame {
     });
 
     JButton btnModificar = new JButton("Guardar Modificaciones");
-    btnModificar.addActionListener(e -> {
+        btnModificar.addActionListener(e -> {
         int filas = modeloTabla.getRowCount();
-        clientes.clear(); // Se vacía antes de actualizar los cambios
 
         for (int i = 0; i < filas; i++) {
             String id = (String) modeloTabla.getValueAt(i, 0);
@@ -536,11 +660,34 @@ public class Administrador extends javax.swing.JFrame {
             String contraseña = (String) modeloTabla.getValueAt(i, 3);
             String tipoCliente = (String) modeloTabla.getValueAt(i, 4);
             String automoviles = (String) modeloTabla.getValueAt(i, 5);
-            clientes.add(new String[]{id, nombre, usuario, contraseña, tipoCliente, automoviles});
+
+            // Buscar el registro con el mismo ID y actualizarlo
+            for (int j = 0; j < clientes.size(); j++) {
+                if (clientes.get(j)[0].equals(id)) { // Si el ID coincide, actualizar datos
+                    clientes.set(j, new String[]{id, nombre, usuario, contraseña, tipoCliente, automoviles});
+                    break;
+                }
+            }
+            
+            // Verificar si el ID ya existe en la lista
+            for (String[] cliente : clientes) {
+                if (cliente[0].equals(id)) {
+                    cliente[1] = nombre;
+                    cliente[2] = usuario;
+                    cliente[3] = contraseña;
+                    cliente[4] = tipoCliente;
+                    cliente[5] = automoviles;
+                    break;
+                }
+            }
+            
+            
         }
 
+        DatosPersistencia.guardarDatos(repuestos, servicios, clientes); // Guardar sin duplicados
         JOptionPane.showMessageDialog(null, "Modificaciones guardadas correctamente.");
     });
+
 
     // Formulario para agregar clientes nuevos
     JTextField txtNombre = new JTextField(10);
@@ -554,6 +701,7 @@ public class Administrador extends javax.swing.JFrame {
         String id = String.valueOf(clientes.size() + 1); // Generar nuevo ID
         clientes.add(new String[]{id, txtNombre.getText(), txtUsuario.getText(), txtContraseña.getText(), txtTipoCliente.getText(), txtAutomoviles.getText()});
         modeloTabla.addRow(new String[]{id, txtNombre.getText(), txtUsuario.getText(), txtContraseña.getText(), txtTipoCliente.getText(), txtAutomoviles.getText()});
+        DatosPersistencia.guardarDatos(repuestos, servicios, clientes); // Guardar cambios después de modificar
         JOptionPane.showMessageDialog(null, "Cliente agregado correctamente.");
     });
 
@@ -577,6 +725,97 @@ public class Administrador extends javax.swing.JFrame {
     ventanaEmergente.add(panelFormulario, java.awt.BorderLayout.NORTH);
     ventanaEmergente.setVisible(true);
     }//GEN-LAST:event_ClienteAutoActionPerformed
+
+    private void ProgresoAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProgresoAutoActionPerformed
+        // TODO add your handling code here:
+        JFrame ventanaEmergente = new JFrame("Progreso de Automóviles");
+    ventanaEmergente.setSize(1300, 500);
+    ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    ventanaEmergente.setLayout(new java.awt.GridLayout(4, 1, 10, 10)); // Espaciado entre secciones
+
+    // Tablas para cada categoría
+    String[] columnasEspera = {"Orden", "Automóvil", "Cliente"};
+    String[] columnasAtencion = {"Orden", "Automóvil", "Cliente", "Mecánico"};
+    String[] columnasListos = {"Orden", "Automóvil", "Cliente", "Servicio", "Total"};
+    String[] columnasPendientes = {"Cliente", "Total Factura", "Estado"};
+    
+    JLabel lblEspera = new JLabel("🚗 Vehículos en Espera", JLabel.CENTER);
+    JLabel lblAtencion = new JLabel("🔧 Vehículos en Mantenimiento", JLabel.CENTER);
+    JLabel lblListos = new JLabel("✅ Vehículos Listos para Entrega", JLabel.CENTER);
+    JLabel lblPendientes = new JLabel("💰 Clientes con Facturas Pendientes", JLabel.CENTER);
+
+    JTable tablaEspera = new JTable(new DefaultTableModel(columnasEspera, 0));
+    JTable tablaAtencion = new JTable(new DefaultTableModel(columnasAtencion, 0));
+    JTable tablaListos = new JTable(new DefaultTableModel(columnasListos, 0));
+    JTable tablaPendientes = new JTable(new DefaultTableModel(columnasPendientes, 0));
+    
+    // Crear paneles para cada categoría con título y tabla
+    JPanel panelEspera = new JPanel(new java.awt.BorderLayout());
+    panelEspera.setBorder(BorderFactory.createTitledBorder("🚗 Vehículos en Espera"));
+    panelEspera.add(lblEspera, java.awt.BorderLayout.NORTH);
+    panelEspera.add(new JScrollPane(tablaEspera), java.awt.BorderLayout.CENTER);
+
+    JPanel panelAtencion = new JPanel(new java.awt.BorderLayout());
+    panelAtencion.setBorder(BorderFactory.createTitledBorder("🔧 Vehículos en Mantenimiento"));
+    panelAtencion.add(lblAtencion, java.awt.BorderLayout.NORTH);
+    panelAtencion.add(new JScrollPane(tablaAtencion), java.awt.BorderLayout.CENTER);
+
+    JPanel panelListos = new JPanel(new java.awt.BorderLayout());
+    panelListos.setBorder(BorderFactory.createTitledBorder("✅ Vehículos Listos para Entrega"));
+    panelListos.add(lblListos, java.awt.BorderLayout.NORTH);
+    panelListos.add(new JScrollPane(tablaListos), java.awt.BorderLayout.CENTER);
+
+    JPanel panelPendientes = new JPanel(new java.awt.BorderLayout());
+    panelPendientes.setBorder(BorderFactory.createTitledBorder("💰 Clientes con Facturas Pendientes"));
+    panelPendientes.add(lblPendientes, java.awt.BorderLayout.NORTH);
+    panelPendientes.add(new JScrollPane(tablaPendientes), java.awt.BorderLayout.CENTER);
+
+    // Agregar los paneles a la ventana
+    ventanaEmergente.add(panelEspera);
+    ventanaEmergente.add(panelAtencion);
+    ventanaEmergente.add(panelListos);
+    ventanaEmergente.add(panelPendientes);
+
+    ventanaEmergente.add(new JScrollPane(tablaEspera));
+    ventanaEmergente.add(new JScrollPane(tablaAtencion));
+    ventanaEmergente.add(new JScrollPane(tablaListos));
+    ventanaEmergente.add(new JScrollPane(tablaPendientes));
+
+    // Agregar datos simulados (en un proyecto real, vendrían de una base de datos)
+    DefaultTableModel modeloEspera = (DefaultTableModel) tablaEspera.getModel();
+    modeloEspera.addRow(new Object[]{"1", "Honda Civic", "Robert"});
+    modeloEspera.addRow(new Object[]{"2", "BMW", "Fernando"});
+
+    DefaultTableModel modeloAtencion = (DefaultTableModel) tablaAtencion.getModel();
+    modeloAtencion.addRow(new Object[]{"1", "Honda Civic", "Robert", "Hugo"});
+    modeloAtencion.addRow(new Object[]{"2", "BMW", "Fernando", "Jorge"});
+
+    DefaultTableModel modeloListos = (DefaultTableModel) tablaListos.getModel();
+    modeloListos.addRow(new Object[]{"1", "Honda Civic", "Robert", "Cambio de aceite", "152"});
+    modeloListos.addRow(new Object[]{"2", "BMW", "Fernando", "Servicio frenos", "650"});
+
+    DefaultTableModel modeloPendientes = (DefaultTableModel) tablaPendientes.getModel();
+    modeloPendientes.addRow(new Object[]{"Robert", "152", "Pendiente"});
+    modeloPendientes.addRow(new Object[]{"Fernando", "650", "Pagado"});
+
+    ventanaEmergente.setVisible(true);
+    }//GEN-LAST:event_ProgresoAutoActionPerformed
+
+    private void EliminarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarTodoActionPerformed
+        int confirmacion = JOptionPane.showConfirmDialog(null, 
+        "⚠ ¿Estás seguro de que deseas eliminar TODOS los datos?\nEsta acción no se puede deshacer.", 
+        "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        repuestos.clear();
+        servicios.clear();
+        clientes.clear();
+
+        DatosPersistencia.guardarDatos(repuestos, servicios, clientes); // Guardar el estado vacío
+
+        JOptionPane.showMessageDialog(null, "Todos los datos han sido eliminados correctamente.");
+    }
+    }//GEN-LAST:event_EliminarTodoActionPerformed
 
     
     /**
@@ -617,12 +856,14 @@ public class Administrador extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CerrarSesion;
     private javax.swing.JButton ClienteAuto;
+    private javax.swing.JButton EliminarTodo;
     private javax.swing.JButton Importar;
+    private javax.swing.JButton ProgresoAuto;
     private javax.swing.JButton Repuestos;
     private javax.swing.JButton Servicio;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
+

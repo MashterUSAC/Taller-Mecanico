@@ -186,9 +186,22 @@ public class Administrador extends javax.swing.JFrame {
  
     
 
+    private Vector<String[]> clientes = new Vector<>();
     private Vector<String[]> repuestos = new Vector<>();
     private Vector<String[]> servicios = new Vector<>();
-    private Vector<String[]> clientes = new Vector<>();
+
+    public Vector<String[]> getClientes() {
+        return clientes;
+    }
+
+    public Vector<String[]> getRepuestos() {
+        return repuestos;
+    }
+
+    public Vector<String[]> getServicios() {
+        return servicios;
+    }
+    
     private int idRepuestos = 1;
     private int idServicios = 1;
     private int contadorID = 1; // Se inicia en 1, pero puede cambiar si hay datos guardados

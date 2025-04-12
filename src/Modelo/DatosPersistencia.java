@@ -1,6 +1,8 @@
 package Modelo;
 import java.io.*;
 import java.util.Vector;
+import modelo.ClienteAuto;
+
 
 public class DatosPersistencia {
     private static final String ARCHIVO_DATOS = "datos.dat";
@@ -30,6 +32,15 @@ public class DatosPersistencia {
         System.out.println("Error al guardar los usuarios: " + e.getMessage());
     }
 }
+    
+    public static void guardarClientesAuto(Vector<ClienteAuto> clientes) {
+    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("clientes.dat"))) {
+        oos.writeObject(clientes); // Guardar la lista completa
+    } catch (IOException e) {
+        System.out.println("Error al guardar los clientes: " + e.getMessage());
+    }
+}
+
 
     @SuppressWarnings("unchecked")
     public static void cargarUsuarios(Vector<Usuario> usuarios) {
@@ -65,5 +76,17 @@ public class DatosPersistencia {
         System.out.println("Error al cargar datos. Archivo no encontrado o vacío.");
     }
     }
+    
+    @SuppressWarnings("unchecked")
+    public static void cargarClientesAuto(Vector<ClienteAuto> clientes) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("clientes.dat"))) {
+            Vector<ClienteAuto> clientesCargados = (Vector<ClienteAuto>) ois.readObject();
+            clientes.clear();
+            if (clientesCargados != null) clientes.addAll(clientesCargados);
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Archivo de clientes no encontrado o vacío.");
+        }
+    }
+
 }
 

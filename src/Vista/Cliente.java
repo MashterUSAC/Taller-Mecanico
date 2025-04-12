@@ -43,6 +43,11 @@ public class Cliente extends javax.swing.JFrame {
         jLabel1.setText("Cliente");
 
         jButton1.setText("Registrar Automovil");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Ver mis automoviles");
 
@@ -112,6 +117,10 @@ public class Cliente extends javax.swing.JFrame {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor((Component) evt.getSource());
         frame.dispose(); 
     }//GEN-LAST:event_CerrarSesionActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

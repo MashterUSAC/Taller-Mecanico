@@ -6,6 +6,7 @@ package Vista;
 
 import Modelo.DatosPersistencia;
 import static Modelo.DatosPersistencia.generarID;
+import modelo.TablaClientesAuto;
 import Modelo.Usuario;
 import Vista.Administrador.Controlador;
 import java.awt.Component;
@@ -13,6 +14,7 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import modelo.ClienteAuto;
 
 /**
  *
@@ -20,12 +22,15 @@ import javax.swing.SwingUtilities;
  */
 public class RegistrarUsuario extends javax.swing.JFrame {
     private Vector<Usuario> usuarios = new Vector<>();
+    private Vector<ClienteAuto> clientes = new Vector<>();
+
     /**
      * Creates new form RegistrarUsuario
      */
      public RegistrarUsuario() {
         initComponents();
         DatosPersistencia.cargarUsuarios(usuarios); // Cargar usuarios al iniciar
+        
     }
     
     /**
@@ -179,40 +184,37 @@ public class RegistrarUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_CancelarActionPerformed
 
     private void RegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarActionPerformed
-    // TODO add your handling code here:
+     DatosPersistencia.cargarClientesAuto(clientes); // Cargar clientes antes de agregar uno nuevo
+
     String dpi = DPI.getText();
-        String nombreCompleto = Nombre.getText();
-        String usuario = Usuario.getText();
-        String contraseña = new String(Contraseña.getPassword());
-        
-        if (dpi.isEmpty() || nombreCompleto.isEmpty() || usuario.isEmpty() || contraseña.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
+    String nombreCompleto = Nombre.getText();
+    String usuario = Usuario.getText();
+    String contraseña = new String(Contraseña.getPassword());
+
+    if (dpi.isEmpty() || nombreCompleto.isEmpty() || usuario.isEmpty() || contraseña.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.");
+        return;
+    }
+
+    // Verificar si el DPI o Usuario ya existen
+    for (ClienteAuto cliente : clientes) {
+        if (cliente.getDpi().equals(dpi) || cliente.getUsuario().equals(usuario)) {
+            JOptionPane.showMessageDialog(null, "DPI o Usuario ya están registrados.");
             return;
         }
-        
-        // Verificar si el DPI ya existe
-        boolean existe = false;
-        for (Usuario u : usuarios) {
-            if (u.getDpi().equals(dpi)) {
-                JOptionPane.showMessageDialog(null, "Este DPI ya está registrado.");
-                existe = true;
-                break;
-            }
-        }
-        
-        if (!existe) {
-            String idNuevo = String.valueOf(generarID()); // Generar nuevo ID
-            Usuario nuevoUsuario = new Usuario(idNuevo, dpi, nombreCompleto, usuario, contraseña);
-            usuarios.add(nuevoUsuario);
+    }
 
-            DatosPersistencia.guardarUsuarios(usuarios); // Guardar datos
+    // Generar nuevo usuario con un ID único
+    String idNuevo = String.valueOf(DatosPersistencia.generarID());
+    ClienteAuto nuevoCliente = new ClienteAuto(idNuevo, dpi, nombreCompleto, usuario, contraseña);
+    clientes.add(nuevoCliente); // Agregar usuario sin borrar los anteriores
 
-            JOptionPane.showMessageDialog(null, "Usuario registrado correctamente.");
-            DPI.setText("");
-            Nombre.setText("");
-            Usuario.setText("");
-            Contraseña.setText("");
-        }
+    DatosPersistencia.guardarClientesAuto(clientes); // Guardar la lista completa sin borrar registros
+    JOptionPane.showMessageDialog(null, "Usuario registrado correctamente.");
+    
+    //Salirse
+    new LoginUser().setVisible(true);
+    this.dispose(); // Cerrar ventana
     }//GEN-LAST:event_RegistrarActionPerformed
 
     private void UsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsuarioActionPerformed

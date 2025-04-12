@@ -5,6 +5,7 @@
 package Vista;
 
 import Modelo.DatosPersistencia;
+import modelo.TablaClientesAuto;
 import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import modelo.TablaClientesAuto;
 
 /**
  *
@@ -615,7 +617,13 @@ public class Administrador extends javax.swing.JFrame {
 
     private void ClienteAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClienteAutoActionPerformed
         // TODO add your handling code here:
-        JFrame ventanaEmergente = new JFrame("Clientes y Automóviles");
+        
+        
+    TablaClientesAuto tabla = new TablaClientesAuto();
+    tabla.setVisible(true);
+
+        
+        /*JFrame ventanaEmergente = new JFrame("Clientes y Automóviles");
     ventanaEmergente.setSize(1250, 400);
     ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     ventanaEmergente.setLayout(new java.awt.BorderLayout());
@@ -736,7 +744,7 @@ public class Administrador extends javax.swing.JFrame {
     panelBotones.add(btnModificar);
     ventanaEmergente.add(panelBotones, java.awt.BorderLayout.SOUTH);
     ventanaEmergente.add(panelFormulario, java.awt.BorderLayout.NORTH);
-    ventanaEmergente.setVisible(true);
+    ventanaEmergente.setVisible(true);*/
     }//GEN-LAST:event_ClienteAutoActionPerformed
 
     private void ProgresoAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProgresoAutoActionPerformed

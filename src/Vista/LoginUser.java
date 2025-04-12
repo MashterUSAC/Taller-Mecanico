@@ -4,6 +4,10 @@
  */
 package Vista;
 
+import modelo.ClienteAuto;
+import Modelo.DatosPersistencia;
+import Modelo.DatosPersistencia;
+import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -19,8 +23,11 @@ public class LoginUser extends javax.swing.JFrame {
      */
     public LoginUser() {
         initComponents();
+        DatosPersistencia.cargarClientesAuto(clientes); // Cargar usuarios correctamente
     }
 
+    private Vector<ClienteAuto> clientes = new Vector<>();
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -146,16 +153,26 @@ public class LoginUser extends javax.swing.JFrame {
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
         // TODO add your handling code here:
-        String ContraseñaIngresada= new String(Contraseña.getPassword());
-        String UsuarioIngresado = Usuario.getText();
-        
-        if (UsuarioIngresado.equals("c") && ContraseñaIngresada.equals("c")){
-            JOptionPane.showMessageDialog (null, "Bienvenido");
-            new Cliente().setVisible(true);
-            ((JFrame) SwingUtilities.getWindowAncestor(Login)).dispose();
-        } else {
-            JOptionPane.showMessageDialog (null, "Contraseña o Usuario Incorrecto");
-        }      
+        String usuarioIngresado = Usuario.getText();
+    String contraseñaIngresada = new String(Contraseña.getPassword());
+
+    DatosPersistencia.cargarClientesAuto(clientes); // Cargar clientes desde la tabla actualizada
+
+    boolean encontrado = false;
+    for (ClienteAuto cliente : clientes) {
+        if (cliente.getUsuario().equals(usuarioIngresado) && cliente.getContraseña().equals(contraseñaIngresada)) {
+            encontrado = true;
+            break;
+        }
+    }
+
+    if (encontrado) {
+        JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso.");
+        new Cliente().setVisible(true); // Abrir ventana de usuario
+        this.dispose(); // Cerrar pantalla de login
+    } else {
+        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.");
+    }      
     }//GEN-LAST:event_LoginActionPerformed
 
     private void ContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContraseñaActionPerformed

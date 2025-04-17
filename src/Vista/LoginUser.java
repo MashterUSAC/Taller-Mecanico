@@ -148,27 +148,29 @@ public class LoginUser extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
-        // TODO add your handling code here:
         String usuarioIngresado = Usuario.getText();
     String contraseñaIngresada = new String(Contraseña.getPassword());
 
     DatosPersistencia.cargarClientesAuto(clientes); // Cargar clientes desde la tabla actualizada
 
     boolean encontrado = false;
+    ClienteAuto clienteActual = null; // Guardar el cliente encontrado
+
     for (ClienteAuto cliente : clientes) {
         if (cliente.getUsuario().equals(usuarioIngresado) && cliente.getContraseña().equals(contraseñaIngresada)) {
             encontrado = true;
+            clienteActual = cliente; // Asignar el cliente encontrado
             break;
         }
     }
 
     if (encontrado) {
-        JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso.");
-        new Cliente().setVisible(true); // Abrir ventana de usuario
-        this.dispose(); // Cerrar pantalla de login
+        JOptionPane.showMessageDialog(this, "✅ Inicio de sesión exitoso. Bienvenido, " + usuarioIngresado);
+        new Cliente(usuarioIngresado, clientes).setVisible(true); // Abre la ventana principal con el usuario activo
+        dispose(); // Cierra la ventana de login
     } else {
-        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.");
-    }      
+        JOptionPane.showMessageDialog(this, "❌ Usuario o contraseña incorrectos. Inténtalo de nuevo.");
+    } 
     }//GEN-LAST:event_LoginActionPerformed
 
     private void ContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContraseñaActionPerformed

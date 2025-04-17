@@ -1,8 +1,9 @@
-package Vista;
+package vistas;
 
 import java.awt.Component;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import vistas.LoginUser;
 
 public class UserAdmin extends javax.swing.JFrame {
 

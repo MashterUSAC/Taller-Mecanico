@@ -1,4 +1,4 @@
-package Vista;
+package vistas;
 
 import modelos.DatosPersistencia;
 import modelos.TablaClientesAuto;

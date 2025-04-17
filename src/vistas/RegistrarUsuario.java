@@ -1,10 +1,11 @@
-package Vista;
+package vistas;
 
 import modelos.DatosPersistencia;
 import static modelos.DatosPersistencia.generarID;
 import modelos.TablaClientesAuto;
 import modelos.Usuario;
-import Vista.Administrador.Controlador;
+import vistas.Administrador.Controlador;
+import vistas.LoginUser;
 import java.awt.Component;
 import java.util.Vector;
 import javax.swing.JFrame;

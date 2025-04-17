@@ -1,4 +1,4 @@
-package Vista;
+package vistas;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;

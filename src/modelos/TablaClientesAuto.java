@@ -6,7 +6,7 @@ import modelos.Ordenamiento; // Importar la nueva clase
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import vista.ListaAutomoviles;
+import vistas.ListaAutomoviles;
 
 public class TablaClientesAuto extends JFrame {
     private JTable tabla;

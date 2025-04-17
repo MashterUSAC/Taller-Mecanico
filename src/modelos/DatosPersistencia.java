@@ -1,7 +1,7 @@
-package Modelo;
+package modelos;
 import java.io.*;
 import java.util.Vector;
-import modelo.ClienteAuto;
+import modelos.ClienteAuto;
 
 
 public class DatosPersistencia {

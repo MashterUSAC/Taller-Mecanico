@@ -1,5 +1,5 @@
-package Modelo; // Si prefieres que esté en Modelo, cambia esto a `package Modelo;`
-import modelo.ClienteAuto;
+package modelos; // Si prefieres que esté en Modelo, cambia esto a `package Modelo;`
+import modelos.ClienteAuto;
 import java.util.Vector;
 
 public class Ordenamiento {

@@ -1,6 +1,6 @@
 package vista;
 
-import modelo.ClienteAuto;
+import modelos.ClienteAuto;
 import javax.swing.*;
 import java.awt.*;
 

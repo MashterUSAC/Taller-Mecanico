@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vista;
 
-import Modelo.DatosPersistencia;
-import modelo.TablaClientesAuto;
+import modelos.DatosPersistencia;
+import modelos.TablaClientesAuto;
 import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,7 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import modelo.TablaClientesAuto;
+import modelos.TablaClientesAuto;
 
 /**
  *

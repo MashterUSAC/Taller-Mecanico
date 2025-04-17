@@ -1,8 +1,8 @@
-package modelo;
+package modelos;
 
-import Modelo.DatosPersistencia;
-import modelo.ClienteAuto;
-import Modelo.Ordenamiento; // Importar la nueva clase
+import modelos.DatosPersistencia;
+import modelos.ClienteAuto;
+import modelos.Ordenamiento; // Importar la nueva clase
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

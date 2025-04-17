@@ -1,5 +1,5 @@
 
-import Modelo.DatosPersistencia;
+import modelos.DatosPersistencia;
 import java.util.Vector;
 
 public class Controlador {

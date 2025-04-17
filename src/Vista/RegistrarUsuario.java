@@ -1,20 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vista;
 
-import Modelo.DatosPersistencia;
-import static Modelo.DatosPersistencia.generarID;
-import modelo.TablaClientesAuto;
-import Modelo.Usuario;
+import modelos.DatosPersistencia;
+import static modelos.DatosPersistencia.generarID;
+import modelos.TablaClientesAuto;
+import modelos.Usuario;
 import Vista.Administrador.Controlador;
 import java.awt.Component;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import modelo.ClienteAuto;
+import modelos.ClienteAuto;
 
 /**
  *
